@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+            <item name="point_reward_discount" instance="Magento\PointRewardPromotion\Model\Quote\Discount" sort_order="500"/>
+            <item name="point_reward_total" instance="Magento\PointRewardPromotion\Model\Quote\TotalPointReward" sort_order="400"/>
+        </group>
+    </section>
+</config>

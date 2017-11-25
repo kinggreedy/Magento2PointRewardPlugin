@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="top.links">
+        <block class="Magento\PointRewardPromotion\Block\AccountPointReward" name="point-reward-link" after="my-account-link"/>
+    </referenceBlock>
+    <!--<move element="top.links" destination="customer"/>
+    <move element="point-reward-link" destination="top.links" before="wish-list-link"/>-->
+</page>

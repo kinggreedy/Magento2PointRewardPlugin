@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+/* @var $block \Magento\Wishlist\Block\Link */
+?>
+<li class="link point-reward" data-bind="scope: 'customer'">
+    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes() ?>><?php echo $block->escapeHtml($block->getLabel()) ?>
+        <span data-bind="text: customer().point_reward_customer" class="counter qty"></span>
+    </a>
+</li>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "wishlist": {
+                        "component": "Magento_Wishlist/js/view/wishlist"
+                    }
+                }
+            }
+        }
+    }
+</script>

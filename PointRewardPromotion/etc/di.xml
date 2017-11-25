@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Checkout\Controller\Onepage\Success" type="Magento\PointRewardPromotion\Controller\Onepage\Success" />
+    <preference for="Magento\Checkout\CustomerData\DefaultItem" type="Magento\PointRewardPromotion\Controller\CustomerData\DefaultItem" />
+    <preference for="Magento\ConfigurableProduct\CustomerData\ConfigurableItem" type="Magento\PointRewardPromotion\Controller\CustomerData\DefaultItem" />
+    <preference for="Magento\Customer\CustomerData\Customer" type="Magento\PointRewardPromotion\Controller\CustomerData\Customer" />
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="pr_promo_init" xsi:type="object">Magento\PointRewardPromotion\Console\Command\InitCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\AbstractCart">
+        <plugin name="item-abstract-cart" type="Magento\PointRewardPromotion\Block\AbstractCart" sortOrder="1"/>
+    </type>
+</config>
