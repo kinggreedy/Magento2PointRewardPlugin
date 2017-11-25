@@ -14,9 +14,7 @@ class ConfigurableItem extends \Magento\ConfigurableProduct\CustomerData\Configu
     {
         $data = parent::getItemData($item);
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $productId = $this->item->getProduct()->getIdBySku($this->item->getProduct()->getSku());
-        $product = $objectManager->create(\Magento\Catalog\Model\Product::class)->load($productId);
+        $product = $this->getChildProduct();
         $pointReward = intval($product->getCustomAttribute('point_reward')->getValue()) * $this->item->getQty();
         $data['product_point_reward'] = "Reward: $pointReward P";
         $data['product_point_reward_value'] = $pointReward;

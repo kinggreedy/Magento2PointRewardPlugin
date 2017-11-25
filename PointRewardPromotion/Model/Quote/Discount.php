@@ -3,22 +3,16 @@ namespace Magento\PointRewardPromotion\Model\Quote;
 
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
-    protected $eventManager;
-    protected $validator;
-    protected $storeManager;
-    protected $priceCurrency;
+    /**
+     * @var \Magento\Customer\Model\Session $customerSession
+     */
+    protected $customerSession;
 
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\SalesRule\Model\Validator $validator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->setCode('point_reward_discount');
-        $this->eventManager = $eventManager;
-        $this->calculator = $validator;
-        $this->storeManager = $storeManager;
-        $this->priceCurrency = $priceCurrency;
+        $this->customerSession = $customerSession;
     }
 
     public function collect(
@@ -28,20 +22,26 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     ) {
         $parentResult = parent::collect($quote, $shippingAssignment, $total);
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $customerSession = $objectManager->get(\Magento\Customer\Model\Session::class);
-
         //load customer total point
         $discountPercentage = 0;
         $customerPoint = 0;
 
-        if ($customerSession->isLoggedIn()) {
-            $customer = $customerSession->getCustomer();
+        if ($this->customerSession->isLoggedIn()) {
+            $customer = $this->customerSession->getCustomer();
             $customerData = $customer->getData();
             if (isset($customerData["point_reward_customer"])) {
                 $customerPoint = intval($customerData["point_reward_customer"]);
             }
         }
+
+        /*
+         * Giving customer discount based on their current tier
+         * The customer must have at least 1000 point (~10$) spent to begin to get benefit
+         *
+         * DiscountPercentage is based on log10 of point, basically, the number of digit
+         * If point > 1000000 (~10 000$ spent), discount +2%
+         * If point > 100000000 (~1 000 000$ spent), discount +7%
+         */
 
         if ($customerPoint > 100000000) {
             $discountPercentage = floor(log10($customerPoint) + 7) / 100;

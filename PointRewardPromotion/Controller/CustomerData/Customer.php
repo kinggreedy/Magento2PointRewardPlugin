@@ -4,6 +4,24 @@ namespace Magento\PointRewardPromotion\Controller\CustomerData;
 class Customer extends \Magento\Customer\CustomerData\Customer
 {
     /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
+    protected $customerFactory;
+
+    /**
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     * @param \Magento\Customer\Helper\View $customerViewHelper
+     */
+    public function __construct(
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Customer\Helper\View $customerViewHelper,
+        \Magento\Customer\Model\CustomerFactory $customerFactory
+    ) {
+        parent::__construct($currentCustomer, $customerViewHelper);
+        $this->customerFactory = $customerFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSectionData()
@@ -11,9 +29,8 @@ class Customer extends \Magento\Customer\CustomerData\Customer
         $data = parent::getSectionData();
 
         $customer = $this->currentCustomer->getCustomer();
+        $customerData = $this->customerFactory->create()->load($customer->getId())->getData();
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $customerData = $objectManager->create(\Magento\Customer\Model\Customer::class)->load($customer->getId())->getData();
         $customerPoint = 0;
         if (isset($customerData["point_reward_customer"])) {
             $customerPoint = intval($customerData["point_reward_customer"]);
