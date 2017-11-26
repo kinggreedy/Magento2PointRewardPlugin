@@ -10,34 +10,37 @@
 
 $_item = $block->getItem();
 $product = $_item->getProduct();
+$_itemId = $_item->getId();
 $isVisibleProduct = $product->isVisibleInSiteVisibility();
 /** @var \Magento\Msrp\Helper\Data $helper */
 $helper = $this->helper('Magento\Msrp\Helper\Data');
 $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
+$hasProductUrl = $block->hasProductUrl();
+$blockProductName = $block->getProductName();
 ?>
 <tbody class="cart item">
 <tr class="item-info">
     <td data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item">
-        <?php if ($block->hasProductUrl()):?>
+        <?php if ($hasProductUrl):?>
         <a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"
-           title="<?= $block->escapeHtml($block->getProductName()) ?>"
+           title="<?= $block->escapeHtml($blockProductName) ?>"
            tabindex="-1"
            class="product-item-photo">
             <?php else:?>
             <span class="product-item-photo">
             <?php endif;?>
             <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
-            <?php if ($block->hasProductUrl()):?>
+            <?php if ($hasProductUrl):?>
         </a>
     <?php else: ?>
         </span>
     <?php endif; ?>
         <div class="product-item-details">
             <strong class="product-item-name">
-                <?php if ($block->hasProductUrl()):?>
-                    <a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
+                <?php if ($hasProductUrl):?>
+                    <a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"><?= $block->escapeHtml($blockProductName) ?></a>
                 <?php else: ?>
-                    <?= $block->escapeHtml($block->getProductName()) ?>
+                    <?= $block->escapeHtml($blockProductName) ?>
                 <?php endif; ?>
             </strong>
             <?php if ($_options = $block->getOptionList()):?>
@@ -74,7 +77,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
         <td class="col msrp" data-th="<?= $block->escapeHtml(__('Price')) ?>">
                 <span class="pricing msrp">
                     <span class="msrp notice"><?= /* @escapeNotVerified */ __('See price before order confirmation.') ?></span>
-                    <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
+                    <?php $helpLinkId = 'cart-msrp-help-' . $_itemId; ?>
                     <a href="#" class="action help map" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ $helpLinkId ?>","productName": "<?= /* @escapeNotVerified */ $product->getName() ?>","showAddToCart": false}}'>
                         <span><?= /* @escapeNotVerified */ __("What's this?") ?></span>
                     </a>
@@ -87,12 +90,12 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <?php endif; ?>
     <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
         <div class="field qty">
-            <label class="label" for="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty">
+            <label class="label" for="cart-<?= /* @escapeNotVerified */ $_itemId ?>-qty">
                 <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
             </label>
             <div class="control qty">
-                <input id="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty"
-                       name="cart[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
+                <input id="cart-<?= /* @escapeNotVerified */ $_itemId ?>-qty"
+                       name="cart[<?= /* @escapeNotVerified */ $_itemId ?>][qty]"
                        data-cart-item-id="<?= /* @escapeNotVerified */ $_item->getSku() ?>"
                        value="<?= /* @escapeNotVerified */ $block->getQty() ?>"
                        type="number"

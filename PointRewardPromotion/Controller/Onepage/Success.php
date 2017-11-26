@@ -6,6 +6,10 @@ use Magento\Sales\Model\Order;
 
 class Success extends \Magento\Checkout\Controller\Onepage\Success
 {
+    /**
+     * @var \Magento\Checkout\Model\Session\SuccessValidator
+     */
+    public $successValidator;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
@@ -32,6 +36,7 @@ class Success extends \Magento\Checkout\Controller\Onepage\Success
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Checkout\Model\Session\SuccessValidator $successValidator
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory,
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      *
@@ -53,9 +58,11 @@ class Success extends \Magento\Checkout\Controller\Onepage\Success
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Checkout\Model\Session\SuccessValidator $successValidator,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
+        $this->successValidator = $successValidator;
         $this->customerFactory = $customerFactory;
         $this->productFactory = $productFactory;
         parent::__construct(
@@ -84,8 +91,7 @@ class Success extends \Magento\Checkout\Controller\Onepage\Success
     public function execute()
     {
         $session = $this->getOnepage()->getCheckout();
-        $objectManager = $this->_objectManager;
-        if ($objectManager->get(\Magento\Checkout\Model\Session\SuccessValidator::class)->isValid()) {
+        if ($this->successValidator->isValid() && $this->_customerSession->isLoggedIn()) {
             $order = $session->getLastRealOrder();
 
             $customerId = $order->getCustomerId();
@@ -109,7 +115,7 @@ class Success extends \Magento\Checkout\Controller\Onepage\Success
 
             //save the collected point of customer. No idea why the only way it works is by creating CustomerFactory from $om
             $customer->setData('point_reward_customer', $totalPoint);
-            $customerResource = $objectManager->create(\Magento\Customer\Model\ResourceModel\CustomerFactory::class)->create();
+            $customerResource = $this->_objectManager->create(\Magento\Customer\Model\ResourceModel\CustomerFactory::class)->create();
             $customerResource->saveAttribute($customer, 'point_reward_customer');
         }
         return parent::execute();

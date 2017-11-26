@@ -38,7 +38,7 @@ class AccountPointReward extends \Magento\Framework\View\Element\Html\Link
      */
     public function getHref()
     {
-        return $this->getUrl('customer/account');
+        return $this->getUrl('#');
     }
 
     /**
@@ -47,6 +47,14 @@ class AccountPointReward extends \Magento\Framework\View\Element\Html\Link
     public function getLabel()
     {
         return __('Reward');
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return "";
     }
 
     /**

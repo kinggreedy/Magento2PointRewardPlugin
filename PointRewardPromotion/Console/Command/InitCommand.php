@@ -4,12 +4,9 @@ namespace Magento\PointRewardPromotion\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\{ObjectManager, State};
+use Magento\Framework\App\State;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-/**
- * Class InitCommand
- */
 class InitCommand extends Command
 {
     /**
@@ -28,7 +25,6 @@ class InitCommand extends Command
     protected $productResource;
 
     /**
-     * InitCommand constructor.
      * @param State $state
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\ProductRepository $productRepository

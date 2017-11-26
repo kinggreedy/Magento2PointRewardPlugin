@@ -6,37 +6,21 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-/**
- * @codeCoverageIgnore
- */
 class InstallData implements InstallDataInterface
 {
     /**
-     * Eav setup factory
-     * @var EavSetupFactory
+     * @var \Magento\Eav\Setup\EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * @var AttributeSetFactory
-     */
-    private $attributeSetFactory;
-
-    /**
-     * Init
-     * @param CategorySetupFactory $categorySetupFactory
+     * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
      */
     public function __construct(\Magento\Eav\Setup\EavSetupFactory $eavSetupFactory)
     {
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var EavSetup $eavSetup */
